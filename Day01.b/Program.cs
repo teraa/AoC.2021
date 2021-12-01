@@ -1,16 +1,23 @@
 ﻿using System;
-using System.Collections.Generic;
 
 const int offset = 3;
 
-List<int> n = new();
+int count = 0;
+int i = 0;
+int[] arr = new int[offset];
 string? line;
 while ((line = Console.ReadLine()) is not null)
-    n.Add(int.Parse(line));
+{
+    int n = int.Parse(line);
+    ref int p = ref arr[(i + offset) % offset];
 
-int count = 0;
-for (int i = offset; i < n.Count; i++)
-    if (n[i - offset] < n[i])
+    if (n > p)
         count++;
+
+    p = n;
+    i++;
+}
+
+count -= offset;
 
 Console.WriteLine(count);

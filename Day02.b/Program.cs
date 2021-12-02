@@ -1,6 +1,6 @@
 ﻿using System;
 
-int pos = 0, depth = 0;
+int pos = 0, depth = 0, aim = 0;
 
 string? line;
 while ((line = Console.ReadLine()) is not null)
@@ -11,13 +11,14 @@ while ((line = Console.ReadLine()) is not null)
     switch (span[0])
     {
         case 'd':
-            depth += x;
+            aim += x;
             break;
         case 'u':
-            depth -= x;
+            aim -= x;
             break;
         default:
             pos += x;
+            depth += aim * x;
             break;
     }
 }

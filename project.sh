@@ -1,11 +1,11 @@
 #!/bin/bash
 
-create () {
+copy () {
     source=$1
     target=$2
 
     mkdir $target &&
-    cp $source/* $target/ &&
+    find $source/ -maxdepth 1 -type f -exec cp -t $target/ {} + &&
     mv $target/$source.csproj $target/$target.csproj &&
     sed -ri "s/$source/$target/" $target/* &&
     dotnet sln add $target
@@ -25,10 +25,10 @@ fi
 
 case "$1" in
     add)
-        create 'AoC.Template' $2
+        copy 'AoC.Template' $2
         ;;
     copy)
-        create $2 $3
+        copy $2 $3
         ;;
     remove)
         delete $2

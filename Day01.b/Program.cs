@@ -2,14 +2,15 @@
 
 const int offset = 3;
 
-int count = 0;
-int i = 0;
+int count = -offset;
 int[] arr = new int[offset];
+int i = 0;
 string? line;
+
 while ((line = Console.ReadLine()) is not null)
 {
     int n = int.Parse(line);
-    ref int p = ref arr[(i + offset) % offset];
+    ref int p = ref arr[i % offset];
 
     if (n > p)
         count++;
@@ -17,7 +18,5 @@ while ((line = Console.ReadLine()) is not null)
     p = n;
     i++;
 }
-
-count -= offset;
 
 Console.WriteLine(count);

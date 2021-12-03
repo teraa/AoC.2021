@@ -15,16 +15,11 @@ while ((line = Console.ReadLine()) is not null)
 }
 
 int gamma = 0;
-int epsilon = 0;
 
 for (int i = 0; i < len; i++)
-{
-    int bit = 1 << (len - i - 1);
-
     if (2 * ones[i] >= n)
-        gamma |= bit;
-    else
-        epsilon |= bit;
-}
+        gamma |= 1 << (len - i - 1);
+
+int epsilon = ~gamma & (1 << len) - 1;
 
 Console.WriteLine(gamma * epsilon);

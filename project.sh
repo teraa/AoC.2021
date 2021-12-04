@@ -1,5 +1,12 @@
 #!/bin/bash
 
+add () {
+    target=$1
+
+    dotnet new aoc2021 -n $target
+    dotnet sln add $target
+}
+
 copy () {
     source=$1
     target=$2
@@ -25,7 +32,7 @@ fi
 
 case "$1" in
     add)
-        copy 'AoC.Template' $2
+        add $2
         ;;
     copy)
         copy $2 $3

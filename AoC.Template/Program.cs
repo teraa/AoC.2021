@@ -1,5 +1,3 @@
-﻿using System;
-
-string? line;
+﻿string? line;
 while ((line = Console.ReadLine()) is not null)
     ;

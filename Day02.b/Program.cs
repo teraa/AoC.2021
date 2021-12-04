@@ -1,8 +1,6 @@
-﻿using System;
-
-int pos = 0, depth = 0, aim = 0;
-
+﻿int pos = 0, depth = 0, aim = 0;
 string? line;
+
 while ((line = Console.ReadLine()) is not null)
 {
     var span = line.AsSpan();

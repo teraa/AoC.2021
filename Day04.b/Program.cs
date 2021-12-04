@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-
-const int size = 5;
+﻿const int size = 5;
 
 string? line = Console.ReadLine()!;
 List<int> ns = new();

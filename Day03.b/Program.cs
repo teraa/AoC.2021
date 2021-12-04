@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-
-const int len = 12;
+﻿const int len = 12;
 
 List<int> nums = new();
 string? line;

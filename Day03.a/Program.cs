@@ -1,6 +1,4 @@
-﻿using System;
-
-const int len = 12;
+﻿const int len = 12;
 
 int[] ones = new int[len];
 int n = 0;

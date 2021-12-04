@@ -65,21 +65,18 @@ for (int i = 0; i < picks.Length; i++)
 
 static bool IsWinner(int[][] board, ReadOnlySpan<int> picked)
 {
-    for (int i = 0, j; i < size; i++)
+    for (int i = 0, cr = 0, cc = 0; i < size; i++, cr = cc = 0)
     {
-        for (j = 0; j < size && picked.Contains(board[i][j]); j++)
-        { }
+        for (int j = 0; j < size && (cr == j || cc == j); j++)
+        {
+            if (cr == j && picked.Contains(board[i][j]))
+                cr++;
 
-        if (j == size)
-            return true;
-    }
+            if (cc == j && picked.Contains(board[j][i]))
+                cc++;
+        }
 
-    for (int i = 0, j; i < size; i++)
-    {
-        for (j = 0; j < size && picked.Contains(board[j][i]); j++)
-        { }
-
-        if (j == size)
+        if (cr == size || cc == size)
             return true;
     }
 

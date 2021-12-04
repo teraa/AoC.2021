@@ -1,6 +1,6 @@
 {
   "$schema": "http://json.schemastore.org/template",
-  "author": "Me",
+  "author": "Teraa",
   "classifications": [ "Console", "AoC 2021" ],
   "identity": "Teraa.AoC.2021.Template",
   "name": "Advent of Code 2021 project template",

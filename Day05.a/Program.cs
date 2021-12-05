@@ -29,30 +29,26 @@ Dictionary<Point, int> hits = new();
 
 foreach (var line in lines)
 {
-    (int minx, int maxx) = (line.Start.X, line.End.X);
-    if (minx > maxx)
-        (minx, maxx) = (maxx, minx);
+    int dx = line.End.X - line.Start.X;
+    int dy = line.End.Y - line.Start.Y;
+    int len;
 
-    (int miny, int maxy) = (line.Start.Y, line.End.Y);
-    if (miny > maxy)
-        (miny, maxy) = (maxy, miny);
+    if (dx == 0)
+        len = Math.Abs(dy);
+    else if (dy == 0)
+        len = Math.Abs(dx);
+    else
+        continue;
 
-    if (minx == maxx)
+    int ix = Math.Sign(dx);
+    int iy = Math.Sign(dy);
+
+    for (int i = 0; i <= len; i++)
     {
-        for (int y = miny; y <= maxy; y++)
-        {
-            Point point = new(minx, y);
-            Increment(point);
-        }
-    }
-
-    if (miny == maxy)
-    {
-        for (int x = minx; x <= maxx; x++)
-        {
-            Point point = new(x, miny);
-            Increment(point);
-        }
+        int x = line.Start.X + i * ix;
+        int y = line.Start.Y + i * iy;
+        Point point = new(x, y);
+        hits[point] = hits.TryGetValue(point, out int value) ? value + 1 : 1;
     }
 }
 
@@ -61,9 +57,6 @@ int result = hits.Count(x => x.Value > 1);
 Console.WriteLine(result);
 
 // ---
-
-void Increment(Point point)
-    => hits[point] = hits.TryGetValue(point, out int value) ? value + 1 : 1;
 
 record struct Point(int X, int Y);
 record struct Line(Point Start, Point End);

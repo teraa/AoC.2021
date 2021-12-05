@@ -44,13 +44,14 @@ foreach (var line in lines)
 
     int ix = Math.Sign(dx);
     int iy = Math.Sign(dy);
+    (int x, int y) = line.Start;
 
     for (int i = 0; i <= len; i++)
     {
-        int x = line.Start.X + i * ix;
-        int y = line.Start.Y + i * iy;
         Point point = new(x, y);
         hits[point] = hits.TryGetValue(point, out int value) ? value + 1 : 1;
+        x += ix;
+        y += iy;
     }
 }
 

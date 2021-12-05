@@ -1,57 +1,46 @@
-﻿List<Line> lines = new();
-string? inputLine;
+﻿string? line;
+Dictionary<Point, int> hits = new();
 
-while ((inputLine = Console.ReadLine()) is not null)
+while ((line = Console.ReadLine()) is not null)
 {
-    ReadOnlySpan<char> span = inputLine;
+    ReadOnlySpan<char> span = line;
 
-    int i = span.IndexOf(',');
-    int x1 = int.Parse(span[..i]);
+    int idx = span.IndexOf(',');
+    int x1 = int.Parse(span[..idx]);
 
-    span = span[(i + 1)..];
+    span = span[(idx + 1)..];
 
-    i = span.IndexOf(' ');
-    int y1 = int.Parse(span[..i]);
+    idx = span.IndexOf(' ');
+    int y1 = int.Parse(span[..idx]);
 
-    span = span[(i + " -> ".Length)..];
+    span = span[(idx + " -> ".Length)..];
 
-    i = span.IndexOf(',');
-    int x2 = int.Parse(span[..i]);
+    idx = span.IndexOf(',');
+    int x2 = int.Parse(span[..idx]);
 
-    span = span[(i + 1)..];
+    span = span[(idx + 1)..];
 
     int y2 = int.Parse(span);
 
-    lines.Add(new(new(x1, y1), new(x2, y2)));
-}
 
-Dictionary<Point, int> hits = new();
+    int dx = x2 - x1;
+    int dy = y2 - y1;
 
-foreach (var line in lines)
-{
-    int dx = line.End.X - line.Start.X;
-    int dy = line.End.Y - line.Start.Y;
-    int len;
-
-    if (Math.Abs(dx) == Math.Abs(dy))
-        len = Math.Abs(dx);
-    else if (dx == 0)
-        len = Math.Abs(dy);
-    else if (dy == 0)
-        len = Math.Abs(dx);
+    int d;
+    if (dx == 0)
+        d = Math.Abs(dy);
+    else if (dy == 0 || Math.Abs(dx) == Math.Abs(dy))
+        d = Math.Abs(dx);
     else
         continue;
 
     int ix = Math.Sign(dx);
     int iy = Math.Sign(dy);
-    (int x, int y) = line.Start;
 
-    for (int i = 0; i <= len; i++)
+    for (int i = 0, x = x1, y = y1; i <= d; i++, x += ix, y += iy)
     {
         Point point = new(x, y);
         hits[point] = hits.TryGetValue(point, out int value) ? value + 1 : 1;
-        x += ix;
-        y += iy;
     }
 }
 
@@ -59,7 +48,5 @@ int result = hits.Count(x => x.Value > 1);
 
 Console.WriteLine(result);
 
-// ---
 
 record struct Point(int X, int Y);
-record struct Line(Point Start, Point End);

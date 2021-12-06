@@ -13,7 +13,7 @@
             "program": "${fileDirname}/bin/Debug/net6.0/${relativeFileDirname}.dll",
             "args": [
                 "<",
-                "input.txt",
+                "example.txt",
             ],
             "cwd": "${fileDirname}",
             // For more information about the 'console' field, see https://aka.ms/VSCode-CS-LaunchJson-Console

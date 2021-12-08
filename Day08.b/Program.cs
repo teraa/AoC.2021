@@ -1,19 +1,21 @@
 ﻿const int mid = 59;
 const int digits = 10;
 
-long sum = 0;
+int[] values = new int[digits];
+int[] lengths = new int[digits];
+int[] decoded = new int[digits];
+int sum = 0;
 string? line;
+
 while ((line = Console.ReadLine()) is not null)
 {
-    int[] values = new int[digits];
-    int[] lengths = new int[digits];
-    int[] decoded = new int[digits];
+    Array.Fill(values, 0);
+    Array.Fill(lengths, 0);
     Array.Fill(decoded, -1);
 
     ReadOnlySpan<char> span = line;
 
     var input = span[..(mid - 1)];
-    var output = span[(mid + 2)..];
 
     for (int i = 0, j = 0; i < input.Length; i++)
     {
@@ -44,7 +46,7 @@ while ((line = Console.ReadLine()) is not null)
             decoded[j] = i;
     }
 
-    var byLength = lengths.Select((len, idx) => (len, idx))
+    Dictionary<int, int[]> byLength = lengths.Select((len, idx) => (len, idx))
         .GroupBy(x => x.len, x => x.idx)
         .ToDictionary(x => x.Key, x => x.ToArray());
 
@@ -56,27 +58,21 @@ while ((line = Console.ReadLine()) is not null)
     decoded[2] = byLength[5].First(x => GetWeight(values[x] & values[decoded[4]]) == 2);
     decoded[5] = byLength[5].First(x => x != decoded[3] && x != decoded[2]);
 
-    Debug.Assert(byLength[6].Where(x => GetWeight(values[x] & values[decoded[1]]) == 1).Count() == 1);
-    Debug.Assert(byLength[6].Where(x => (values[x] & values[decoded[4]]) == values[decoded[4]]).Count() == 1);
-    Debug.Assert(byLength[6].Where(x => x != decoded[6] && x != decoded[9]).Count() == 1);
+    var output = span[(mid + 2)..];
+    int[] outputSegments = new int[4];
 
-    Debug.Assert(byLength[5].Where(x => (values[x] & values[decoded[1]]) == values[decoded[1]]).Count() == 1);
-    Debug.Assert(byLength[5].Where(x => GetWeight(values[x] & values[decoded[4]]) == 2).Count() == 1);
-    Debug.Assert(byLength[5].Where(x => x != decoded[3] && x != decoded[2]).Count() == 1);
-
-    int[] outs = new int[4];
     for (int i = 0, j = 0; i < output.Length; i++)
     {
         if (output[i] is ' ')
             j++;
         else
-            outs[j] |= 1 << (output[i] - 'a');
+            outputSegments[j] |= 1 << (output[i] - 'a');
     }
 
     int result = 0;
-    foreach (var o in outs)
+    foreach (var segments in outputSegments)
     {
-        int i = Array.IndexOf(values, o);
+        int i = Array.IndexOf(values, segments);
         int j = Array.IndexOf(decoded, i);
         result = result * 10 + j;
     }

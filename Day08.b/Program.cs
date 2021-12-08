@@ -43,7 +43,7 @@ while ((line = Console.ReadLine()) is not null)
         };
 
         if (j != -1)
-            decoded[j] = i;
+            decoded[j] = values[i];
     }
 
     int[] len5 = new int[3];
@@ -53,24 +53,24 @@ while ((line = Console.ReadLine()) is not null)
     {
         switch (lens[i])
         {
-            case 5: len5[i5++] = i; break;
-            case 6: len6[i6++] = i; break;
+            case 5: len5[i5++] = values[i]; break;
+            case 6: len6[i6++] = values[i]; break;
         }
     }
 
     // HW(x) represents Hamming weight of x
 
     // length 6, HW(6 & 1) = 1
-    decoded[6] = len6.First(x => GetWeight(values[x] & values[decoded[1]]) == 1);
+    decoded[6] = len6.First(x => GetWeight(x & decoded[1]) == 1);
     // length 6, 9 & 4 = 4
-    decoded[9] = len6.First(x => (values[x] & values[decoded[4]]) == values[decoded[4]]);
+    decoded[9] = len6.First(x => (x & decoded[4]) == decoded[4]);
     // last remaining of length 6
     decoded[0] = len6.First(x => x != decoded[6] && x != decoded[9]);
 
     // length 5, 3 & 1 = 1
-    decoded[3] = len5.First(x => (values[x] & values[decoded[1]]) == values[decoded[1]]);
+    decoded[3] = len5.First(x => (x & decoded[1]) == decoded[1]);
     // length 5, HW(2 & 4) = 2
-    decoded[2] = len5.First(x => GetWeight(values[x] & values[decoded[4]]) == 2);
+    decoded[2] = len5.First(x => GetWeight(x & decoded[4]) == 2);
     // last remaining of length 5
     decoded[5] = len5.First(x => x != decoded[3] && x != decoded[2]);
 
@@ -86,10 +86,9 @@ while ((line = Console.ReadLine()) is not null)
     }
 
     int result = 0;
-    foreach (var segs in outputSegments)
+    foreach (int segs in outputSegments)
     {
-        int i = Array.IndexOf(values, segs);
-        int j = Array.IndexOf(decoded, i);
+        int j = Array.IndexOf(decoded, segs);
         result = result * 10 + j;
     }
 

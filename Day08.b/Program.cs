@@ -1,17 +1,17 @@
 ﻿const int mid = 59;
 const int digits = 10;
 
-int[] values = new int[digits];
-int[] lengths = new int[digits];
-int[] decoded = new int[digits];
+int[] values = new int[digits]; // read input values
+int[] lens = new int[digits]; // lengths of each read value - number of segments
+int[] decoded = new int[digits]; // elements represent indices of elements in values array
 int sum = 0;
 string? line;
 
 while ((line = Console.ReadLine()) is not null)
 {
-    Array.Fill(values, 0);
-    Array.Fill(lengths, 0);
-    Array.Fill(decoded, -1);
+    Array.Fill(values, 0); // Since we use |=
+    Array.Fill(lens, 0); // Since we use ++
+    Array.Fill(decoded, -1); // Not needed, only for debugging
 
     ReadOnlySpan<char> span = line;
 
@@ -26,14 +26,14 @@ while ((line = Console.ReadLine()) is not null)
         else
         {
             values[j] |= 1 << (input[i] - 'a');
-            lengths[j]++;
+            lens[j]++;
         }
     }
 
     // 1, 4, 7, 8 by length
-    for (int i = 0; i < lengths.Length; i++)
+    for (int i = 0; i < lens.Length; i++)
     {
-        int j = lengths[i] switch
+        int j = lens[i] switch
         {
             2 => 1,
             3 => 7,
@@ -46,17 +46,33 @@ while ((line = Console.ReadLine()) is not null)
             decoded[j] = i;
     }
 
-    Dictionary<int, int[]> byLength = lengths.Select((len, idx) => (len, idx))
-        .GroupBy(x => x.len, x => x.idx)
-        .ToDictionary(x => x.Key, x => x.ToArray());
+    int[] len5 = new int[3];
+    int[] len6 = new int[3];
 
-    decoded[6] = byLength[6].First(x => GetWeight(values[x] & values[decoded[1]]) == 1);
-    decoded[9] = byLength[6].First(x => (values[x] & values[decoded[4]]) == values[decoded[4]]);
-    decoded[0] = byLength[6].First(x => x != decoded[6] && x != decoded[9]);
+    for (int i = 0, i5 = 0, i6 = 0; i < lens.Length; i++)
+    {
+        switch (lens[i])
+        {
+            case 5: len5[i5++] = i; break;
+            case 6: len6[i6++] = i; break;
+        }
+    }
 
-    decoded[3] = byLength[5].First(x => (values[x] & values[decoded[1]]) == values[decoded[1]]);
-    decoded[2] = byLength[5].First(x => GetWeight(values[x] & values[decoded[4]]) == 2);
-    decoded[5] = byLength[5].First(x => x != decoded[3] && x != decoded[2]);
+    // HW(x) represents Hamming weight of x
+
+    // length 6, HW(6 & 1) = 1
+    decoded[6] = len6.First(x => GetWeight(values[x] & values[decoded[1]]) == 1);
+    // length 6, 9 & 4 = 4
+    decoded[9] = len6.First(x => (values[x] & values[decoded[4]]) == values[decoded[4]]);
+    // last remaining of length 6
+    decoded[0] = len6.First(x => x != decoded[6] && x != decoded[9]);
+
+    // length 5, 3 & 1 = 1
+    decoded[3] = len5.First(x => (values[x] & values[decoded[1]]) == values[decoded[1]]);
+    // length 5, HW(2 & 4) = 2
+    decoded[2] = len5.First(x => GetWeight(values[x] & values[decoded[4]]) == 2);
+    // last remaining of length 5
+    decoded[5] = len5.First(x => x != decoded[3] && x != decoded[2]);
 
     var output = span[(mid + 2)..];
     int[] outputSegments = new int[4];
@@ -70,9 +86,9 @@ while ((line = Console.ReadLine()) is not null)
     }
 
     int result = 0;
-    foreach (var segments in outputSegments)
+    foreach (var segs in outputSegments)
     {
-        int i = Array.IndexOf(values, segments);
+        int i = Array.IndexOf(values, segs);
         int j = Array.IndexOf(decoded, i);
         result = result * 10 + j;
     }
@@ -82,6 +98,7 @@ while ((line = Console.ReadLine()) is not null)
 
 Console.WriteLine(sum);
 
+// Hamming weight
 static int GetWeight(int value)
 {
     int result = 0;

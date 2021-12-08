@@ -14,8 +14,7 @@ while ((line = Console.ReadLine()) is not null)
     Array.Fill(decoded, -1); // Not needed, only for debugging
 
     ReadOnlySpan<char> span = line;
-
-    var input = span[..(mid - 1)];
+    ReadOnlySpan<char> input = span[..(mid - 1)];
 
     for (int i = 0, j = 0; i < input.Length; i++)
     {
@@ -30,31 +29,22 @@ while ((line = Console.ReadLine()) is not null)
         }
     }
 
-    // 1, 4, 7, 8 by length
-    for (int i = 0; i < lens.Length; i++)
-    {
-        int j = lens[i] switch
-        {
-            2 => 1,
-            3 => 7,
-            4 => 4,
-            7 => 8,
-            _ => -1,
-        };
-
-        if (j != -1)
-            decoded[j] = values[i];
-    }
-
     int[] len5 = new int[3];
     int[] len6 = new int[3];
-
     for (int i = 0, i5 = 0, i6 = 0; i < lens.Length; i++)
     {
+        int val = values[i];
+
         switch (lens[i])
         {
-            case 5: len5[i5++] = values[i]; break;
-            case 6: len6[i6++] = values[i]; break;
+            // 1, 4, 7, 8 directly by length
+            case 2: decoded[1] = val; break;
+            case 3: decoded[7] = val; break;
+            case 4: decoded[4] = val; break;
+            case 7: decoded[8] = val; break;
+
+            case 5: len5[i5++] = val; break;
+            case 6: len6[i6++] = val; break;
         }
     }
 
@@ -62,19 +52,19 @@ while ((line = Console.ReadLine()) is not null)
 
     // length 6, HW(6 & 1) = 1
     decoded[6] = len6.First(x => GetWeight(x & decoded[1]) == 1);
-    // length 6, 9 & 4 = 4
+    // length 6, (9 & 4) = 4
     decoded[9] = len6.First(x => (x & decoded[4]) == decoded[4]);
     // last remaining of length 6
     decoded[0] = len6.First(x => x != decoded[6] && x != decoded[9]);
 
-    // length 5, 3 & 1 = 1
+    // length 5, (3 & 1) = 1
     decoded[3] = len5.First(x => (x & decoded[1]) == decoded[1]);
     // length 5, HW(2 & 4) = 2
     decoded[2] = len5.First(x => GetWeight(x & decoded[4]) == 2);
     // last remaining of length 5
     decoded[5] = len5.First(x => x != decoded[3] && x != decoded[2]);
 
-    var output = span[(mid + 2)..];
+    ReadOnlySpan<char> output = span[(mid + 2)..];
     int[] outputSegments = new int[4];
 
     for (int i = 0, j = 0; i < output.Length; i++)

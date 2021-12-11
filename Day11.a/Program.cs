@@ -3,7 +3,7 @@ const int steps = 100;
 
 int[][] arr = new int[size][];
 int flashes = 0;
-HashSet<(int, int)> flashed = new();
+HashSet<(int i, int j)> flashed = new();
 
 for (int i = 0; i < arr.Length; i++)
     arr[i] = Console.ReadLine()!.Select(x => x - '0').ToArray();
@@ -17,7 +17,7 @@ for (int step = 0; step < steps; step++)
             Update(i, j);
 
     foreach (var point in flashed)
-        arr[point.Item1][point.Item2] = 0;
+        arr[point.i][point.j] = 0;
 
     flashes += flashed.Count;
 }

@@ -9,10 +9,8 @@ project=$1
 expected=${@:2}
 cd $1
 
-result=$(dotnet run < input.txt)
-
 if [ "$#" -eq 1 ]; then
-    echo $result
+    dotnet run < input.txt
 else
-    diff -w <(echo "$expected") <(echo "$result") && echo OK
+    dotnet run < input.txt | diff -w <(echo "$expected") - && echo OK
 fi

@@ -12,5 +12,5 @@ cd $1
 if [ "$#" -eq 1 ]; then
     dotnet run < input.txt
 else
-    dotnet run < input.txt | diff -w <(echo "$expected") - && echo OK
+    dotnet run < input.txt | diff --color -w <(echo "$expected") - && echo OK
 fi

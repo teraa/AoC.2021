@@ -14,43 +14,37 @@ while ((line = Console.ReadLine()) is not null)
 Stack<string> visited = new();
 visited.Push(start);
 
-int result = Find(visited);
+int result = Find(visited, start);
 
 Console.WriteLine(result);
 
 // ---
 
-int Find(Stack<string> visited)
+int Find(Stack<string> visited, string current)
 {
     int result = 0;
 
-    string[] validNeighborNodes = neighbors.Where(x => x.Item1 == visited.Peek())
+    IEnumerable<string> validNeighborNodes = neighbors.Where(x => x.Item1 == current)
         .Select(x => x.Item2)
-        .Except(visited.Where(x => IsLower(x)))
-        .ToArray();
+        .Except(visited);
 
-    foreach (var neighborNode in validNeighborNodes)
+    foreach (var node in validNeighborNodes)
     {
-        if (neighborNode == end)
+        if (node == end)
         {
             result++;
         }
+        else if (node[0] is < 'a' or > 'z')
+        {
+            result += Find(visited, node);
+        }
         else
         {
-            visited.Push(neighborNode);
-            result += Find(visited);
+            visited.Push(node);
+            result += Find(visited, node);
             visited.Pop();
         }
     }
 
     return result;
-}
-
-static bool IsLower(string value)
-{
-    for (int i = 0; i < value.Length; i++)
-        if (value[i] is < 'a' or > 'z')
-            return false;
-
-    return true;
 }

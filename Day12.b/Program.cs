@@ -15,35 +15,43 @@ while ((line = Console.ReadLine()) is not null)
 Stack<string> visited = new();
 visited.Push(start);
 
-int result = Find(visited, null);
+int result = Find(visited, start, null);
 
 Console.WriteLine(result);
 
 // ---
 
-int Find(Stack<string> visited, string? allowed)
+int Find(Stack<string> visited, string current, string? allowed)
 {
     int result = 0;
 
-    var excluded = visited.Where(x => IsLower(x) && (x != allowed || visited.Count(y => y == allowed) == maxLowVisits));
+    IEnumerable<string> excluded = visited.GroupBy(x => x)
+        .Where(x => x.Key != allowed || x.Count() == maxLowVisits)
+        .Select(x => x.Key);
 
-    string[] validNeighborNodes = neighbors.Where(x => x.Item1 == visited.Peek())
+    IEnumerable<string> validNeighborNodes = neighbors.Where(x => x.Item1 == current)
         .Select(x => x.Item2)
-        .Except(excluded)
-        .ToArray();
+        .Except(excluded);
 
-    foreach (var neighborNode in validNeighborNodes)
+    foreach (string node in validNeighborNodes)
     {
-        if (neighborNode != end)
+        if (node != end)
         {
-            visited.Push(neighborNode);
+            if (node[0] is >= 'a' and <= 'z')
+            {
+                visited.Push(node);
 
-            result += Find(visited, allowed);
+                result += Find(visited, node, allowed);
 
-            if (allowed is null && IsLower(neighborNode))
-                result += Find(visited, neighborNode);
+                if (allowed is null)
+                    result += Find(visited, node, node);
 
-            visited.Pop();
+                visited.Pop();
+            }
+            else
+            {
+                result += Find(visited, node, allowed);
+            }
         }
         else if (allowed is null || visited.Count(x => x == allowed) == maxLowVisits)
         {
@@ -52,13 +60,4 @@ int Find(Stack<string> visited, string? allowed)
     }
 
     return result;
-}
-
-static bool IsLower(string value)
-{
-    for (int i = 0; i < value.Length; i++)
-        if (value[i] is < 'a' or > 'z')
-            return false;
-
-    return true;
 }

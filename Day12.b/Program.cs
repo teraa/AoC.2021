@@ -12,18 +12,22 @@ while ((line = Console.ReadLine()) is not null)
     neighbors.Add((parts[1], parts[0]));
 }
 
-int result = Find(new() { start }, null);
+Stack<string> visited = new();
+visited.Push(start);
+
+int result = Find(visited, null);
+
 Console.WriteLine(result);
 
 // ---
 
-int Find(List<string> visited, string? allowed)
+int Find(Stack<string> visited, string? allowed)
 {
     int result = 0;
 
     var excluded = visited.Where(x => IsLower(x) && (x != allowed || visited.Count(y => y == allowed) == maxLowVisits));
 
-    string[] validNeighborNodes = neighbors.Where(x => x.Item1 == visited[^1])
+    string[] validNeighborNodes = neighbors.Where(x => x.Item1 == visited.Peek())
         .Select(x => x.Item2)
         .Except(excluded)
         .ToArray();
@@ -32,12 +36,14 @@ int Find(List<string> visited, string? allowed)
     {
         if (neighborNode != end)
         {
-            List<string> newVisited = new(visited) { neighborNode };
+            visited.Push(neighborNode);
 
-            result += Find(newVisited, allowed);
+            result += Find(visited, allowed);
 
             if (allowed is null && IsLower(neighborNode))
-                result += Find(newVisited, neighborNode);
+                result += Find(visited, neighborNode);
+
+            visited.Pop();
         }
         else if (allowed is null || visited.Count(x => x == allowed) == maxLowVisits)
         {

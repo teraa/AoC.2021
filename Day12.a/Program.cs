@@ -11,25 +11,36 @@ while ((line = Console.ReadLine()) is not null)
     neighbors.Add((parts[1], parts[0]));
 }
 
-int result = Find(new() { start });
+Stack<string> visited = new();
+visited.Push(start);
+
+int result = Find(visited);
+
 Console.WriteLine(result);
 
 // ---
 
-int Find(List<string> visited)
+int Find(Stack<string> visited)
 {
     int result = 0;
 
-    string[] validNeighborNodes = neighbors.Where(x => x.Item1 == visited[^1])
+    string[] validNeighborNodes = neighbors.Where(x => x.Item1 == visited.Peek())
         .Select(x => x.Item2)
         .Except(visited.Where(x => IsLower(x)))
         .ToArray();
 
     foreach (var neighborNode in validNeighborNodes)
     {
-        result += neighborNode == end
-            ? 1
-            : Find(new(visited) { neighborNode });
+        if (neighborNode == end)
+        {
+            result++;
+        }
+        else
+        {
+            visited.Push(neighborNode);
+            result += Find(visited);
+            visited.Pop();
+        }
     }
 
     return result;

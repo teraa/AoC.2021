@@ -1,4 +1,4 @@
-﻿List<(int x, int y)> points = new();
+﻿List<Point> points = new();
 int i;
 string? line;
 
@@ -8,7 +8,7 @@ while ((line = Console.ReadLine()) is { Length: > 0 })
     i = span.IndexOf(',');
     int x = int.Parse(span[..i]);
     int y = int.Parse(span[(i + 1)..]);
-    points.Add((x, y));
+    points.Add(new(x, y));
 }
 
 i = "fold along ".Length;
@@ -20,20 +20,20 @@ while ((line = Console.ReadLine()) is not null)
     char axis = span[i];
     int value = int.Parse(span[(i + 2)..]);
 
-    Func<(int x, int y), bool> predicate;
-    Func<(int x, int y), (int x, int y)> projection;
+    Func<Point, bool> predicate;
+    Func<Point, Point> projection;
 
     if (axis == 'x')
     {
         max.x = value;
-        predicate = p => p.x > value;
-        projection = p => p with { x = 2 * value - p.x };
+        predicate = p => p.X > value;
+        projection = p => p with { X = 2 * value - p.X };
     }
     else
     {
         max.y = value;
-        predicate = p => p.y > value;
-        projection = p => p with { y = 2 * value - p.y };
+        predicate = p => p.Y > value;
+        projection = p => p with { Y = 2 * value - p.Y };
     }
 
     var pointsToMove = points.Where(predicate).ToArray();
@@ -44,7 +44,11 @@ while ((line = Console.ReadLine()) is not null)
 for (int y = 0; y < max.y; y++)
 {
     for (int x = 0; x < max.x; x++)
-        Console.Write(points.Contains((x, y)) ? '█' : ' ');
+        Console.Write(points.Contains(new(x, y)) ? '█' : ' ');
 
     Console.WriteLine();
 }
+
+// ---
+
+record struct Point(int X, int Y);

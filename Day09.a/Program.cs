@@ -1,4 +1,4 @@
-﻿List<string> input = new();
+List<string> input = new();
 
 string? line;
 while ((line = Console.ReadLine()) is not null)

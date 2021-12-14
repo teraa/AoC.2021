@@ -1,4 +1,4 @@
-﻿Dictionary<char, (char c, int p)> pairs = new()
+Dictionary<char, (char c, int p)> pairs = new()
 {
     ['('] = (')', 1),
     ['['] = (']', 2),

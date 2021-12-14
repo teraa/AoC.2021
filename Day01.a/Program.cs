@@ -1,4 +1,4 @@
-﻿string? line;
+string? line;
 int count = 0;
 int? prev = null;
 

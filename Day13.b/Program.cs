@@ -1,4 +1,4 @@
-﻿List<Point> points = new();
+List<Point> points = new();
 int i;
 string? line;
 

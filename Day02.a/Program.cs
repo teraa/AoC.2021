@@ -1,4 +1,4 @@
-﻿int pos = 0, depth = 0;
+int pos = 0, depth = 0;
 string? line;
 
 while ((line = Console.ReadLine()) is not null)

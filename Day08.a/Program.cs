@@ -1,4 +1,4 @@
-﻿int count = 0;
+int count = 0;
 string? line;
 
 while ((line = Console.ReadLine()) is not null)

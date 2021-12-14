@@ -1,4 +1,4 @@
-﻿const int mid = 59;
+const int mid = 59;
 const int digits = 10;
 
 int[] values = new int[digits]; // read input values

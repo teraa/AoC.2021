@@ -1,4 +1,4 @@
-﻿const int spawn = 8;
+const int spawn = 8;
 const int reset = 6;
 const int iterations = 80;
 

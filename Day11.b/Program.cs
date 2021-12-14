@@ -1,4 +1,4 @@
-﻿const int size = 10;
+const int size = 10;
 
 int[][] arr = new int[size][];
 int step = 0;

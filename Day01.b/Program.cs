@@ -1,4 +1,4 @@
-﻿const int offset = 3;
+const int offset = 3;
 
 int count = -offset;
 int[] arr = new int[offset];

@@ -1,4 +1,4 @@
-﻿string? line;
+string? line;
 Dictionary<Point, int> hits = new();
 
 while ((line = Console.ReadLine()) is not null)

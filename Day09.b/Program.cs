@@ -1,4 +1,4 @@
-﻿HashSet<(int, int)> processed = new();
+HashSet<(int, int)> processed = new();
 int[] topSizes = new int[3];
 List<string> input = new();
 

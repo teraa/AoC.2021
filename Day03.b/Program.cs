@@ -1,4 +1,4 @@
-﻿const int len = 12;
+const int len = 12;
 
 List<int> nums = new();
 string? line;

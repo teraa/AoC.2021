@@ -1,4 +1,4 @@
-﻿const string start = "start";
+const string start = "start";
 const string end = "end";
 const int maxLowVisits = 2;
 

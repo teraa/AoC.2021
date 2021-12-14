@@ -1,4 +1,4 @@
-﻿ReadOnlySpan<char> input = Console.ReadLine();
+ReadOnlySpan<char> input = Console.ReadLine();
 List<int> nums = new();
 
 int idx;
